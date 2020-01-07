@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title><%= title %></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div style="padding-left: 50px">
+    <br>
+<img src="/images/uc.png" width="150" height="70" />
+</div>
+<hr width="1250px">
+<div class="container">
+  <h2 style="color: #50BCBB; font-size: 33px; text-align: center;"><%= title %></h2>
+  <form action="/update" method="post">
+    <input type="hidden" value="<%= user.id %>" name="id">
+    <div class="form-group">
+        <label for="name">Source :</label>
+        <input type="text" class="form-control" id="name" placeholder="Enter the source" name="name" value="<%= user.name %>" required>
+    </div>
+
+    <div class="form-group">
+        <label for="url">URL :</label>
+        <input type="url" class="form-control" id="email" pattern="^(https://.*|http://.*)$" placeholder="Enter the URL" name="class" value="<%= user.class %>" required>
+    </div>
+
+    <div class="form-group">
+        <label for="phone">Source ID :</label>
+        <input type="text" class="form-control" id="pwd" placeholder="Enter Source ID" name="regno" value="<%= user.regno %>" required>
+    </div>
+
+      <button type="submit" style="color: #fff; background-color: #99CC33; border-color: #99CC33;" class="btn btn-primary">Submit</button>
+      <a href="/" class="btn btn-primary"  style="color: #fff; background-color: #99CC33; border-color: #99CC33;">Back</a>
+
+  </form>
+
+</div>
+
+</body>
+</html>

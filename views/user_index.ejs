@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title><%= title %></title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <style>
+#table {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#table td, #table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#table tr:nth-child(even){background-color: #f2f2f2;}
+
+#table tr:hover {background-color: #ddd;}
+
+#table th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #77bcbc;
+  color: white;
+}
+</style>
+
+
+
+
+</head>
+<body>
+<div style="padding-left: 50px">
+    <br>
+<img src="/images/uc.png" width="150" height="70" />
+</div>
+<hr width="1250px">
+<div class="container">
+    <br>
+  <h2 style="color: #50BCBB; font-size: 25px; text-align: center;">Meltwater Feed</h2>
+  <table id="table">
+    <thead>
+      <tr>
+        <th>Source</th>
+        <th>URL</th>
+        <th>Source ID</th>
+          <th>Edit/Delete</th>
+<!--        <th>Mobile Number</th>-->
+      </tr>
+    </thead>
+    <tbody>
+        <% users.forEach(function(user){ %>
+            <tr>
+                <td><%= user.name %></td>
+                <td><%= user.class %></td>
+                <td align="center"><%= user.regno %></td>
+
+<!--                <td><%= user.mobileno %></td>-->
+                <td>
+                    <a href="edit/<%= user.id %>" class="btn btn-sm btn-primary" style="color: #fff; background-color: #50BCBB; border-color: #50BCBB;">Edit</a>
+                    <a href="delete/<%= user.id %>" class="btn btn-sm btn-danger"  onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
+                </td>
+            </tr>
+        <% }); %>
+    </tbody>
+  </table>
+    <br>
+    <div>
+    <a href="/uploadfiles" class="btn btn-primary" style="color: #fff; background-color: #99CC33; border-color: #99CC33;">Upload file</a>
+     <a href="/add" class="btn btn-primary" style="color: #fff; background-color: #99CC33; border-color: #99CC33;">Add Article</a>
+    </div>
+</div>
+
+</body>
+</html>
