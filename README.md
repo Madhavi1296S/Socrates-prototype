@@ -17,7 +17,7 @@ Socrates prototype is built using
 
 ### Create Database
 - Database name "socka"
-- Import excel.sql file to database through phpmyadmin
+- Import excel.sql(find in repository) file to database through phpmyadmin
 ```sh
 Steps to import Database file
 - phpmyadmin/ admin page  
