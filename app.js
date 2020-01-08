@@ -15,7 +15,7 @@ app.use(express.static("public"));
 
  //checking fork push
 
-
+console.log('checkingytrf')
 
 
 // const connection = mysql.createConnection({
