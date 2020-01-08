@@ -21,17 +21,17 @@
     <input type="hidden" value="<%= user.id %>" name="id">
     <div class="form-group">
         <label for="name">Source :</label>
-        <input type="text" class="form-control" id="name" placeholder="Enter the source" name="name" value="<%= user.name %>" required>
+        <input type="text" class="form-control" id="name" placeholder="Enter the source" name="source" value="<%= user.name %>" required>
     </div>
 
     <div class="form-group">
         <label for="url">URL :</label>
-        <input type="url" class="form-control" id="email" pattern="^(https://.*|http://.*)$" placeholder="Enter the URL" name="class" value="<%= user.class %>" required>
+        <input type="url" class="form-control" id="email" pattern="^(https://.*|http://.*)$" placeholder="Enter the URL" name="url" value="<%= user.class %>" required>
     </div>
 
     <div class="form-group">
         <label for="phone">Source ID :</label>
-        <input type="text" class="form-control" id="pwd" placeholder="Enter Source ID" name="regno" value="<%= user.regno %>" required>
+        <input type="text" class="form-control" id="pwd" placeholder="Enter Source ID" name="sourceid" value="<%= user.regno %>" required>
     </div>
 
       <button type="submit" style="color: #fff; background-color: #99CC33; border-color: #99CC33;" class="btn btn-primary">Submit</button>

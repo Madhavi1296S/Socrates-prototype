@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 //const bootstrap = require('bootstrap');
 const connection = require("./connection");
-
+const fs = require('fs');
 const app = express();
 const xlsx = require('xlsx');
 const excelToJson = require('convert-excel-to-json');
@@ -74,7 +74,7 @@ app.get('/add',(req, res)=>{
 
 
 app.post('/save',(req,res) => {
-    let data = {name: req.body.name, class: req.body.email, regno: Math.floor(Math.random() * 9999999) + 1847100};
+    let data = {source: req.body.source, source_url: req.body.source_url, source_id: Math.floor(Math.random() * 9999999) + 1847100};
     let sql = "INSERT INTO excel SET ?";
     let query = connection.query(sql, data,(err, results)=>{
         if(err) throw arr;
@@ -98,7 +98,7 @@ app.get('/edit/:id',(req, res)=>{
 
 app.post('/update',(req, res)=>{
     const userId = req.body.id;
-    let sql = "update excel SET name='"+req.body.name+"', class='"+req.body.class+"', regno='"+req.body.regno+"' where id = "+userId;
+    let sql = "update excel SET source='"+req.body.source+"', source_url='"+req.body.url+"', source_id='"+req.body.sourceid+"' where id = "+userId;
     let query = connection.query(sql,(err, results) => {
         if(err) throw err;
         res.redirect('/');
@@ -117,57 +117,125 @@ app.get('/delete/:id',(req, res)=>{
 });
 
 
-app.post('/ss',(req, res) => {
+app.post('/upload',function(req,res){
+  //console.log(req.files);
+  if(req.files.upfile){
+    var file = req.files.upfile,
+      name = file.name,
+      type = file.mimetype;
+    var uploadpath = __dirname + '/uploads/' + name;
+    file.mv(uploadpath,function(err){
+      if(err){
+        console.log("File Upload Failed",name,err);
+        res.send("Error Occured!")
+      }
+      else {
+        console.log("File Uploaded",name);
+        businessLogic(req,res,name);
+       // res.send('Done! Uploading files')
+      }
+    });
+  }
+  else {
+    res.send("No File selected !");
+    res.end();
+  };
+});
 
 
 
-    // if(!req.files){
- //   res.send("<h1>Invalid Input</h1>");
-    // }else {
-        const file = req.files.filename;
-    const filename = file.name;
-    file.mv("./uploads/"+filename);
-    // }
+
+function businessLogic(req,res,next){
+    let matched = 0;
+    let not_matched = 0;
+
+     const workbook = xlsx.readFile("./uploads/"+next);  // workbook holds all the sheets in single excel file
+     const sheet_name_list = workbook.SheetNames;  // assigning those sheets names to sheet_name_list
+   //  console.log(sheet_name_list[0]);
+     const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);  //extracting sheet one data to JSON
+     // const totalSources = data.length;  // length of the excel / json sheet
+     // //console.log(totalSources);
+     let sql = `SELECT source_url FROM excel`;
+     let query = connection.query(sql, (err, result) => {
+         if (err) throw err;
+
+         Object.keys(result).forEach(function (key) {
+             let row = result[key];
+             for (let keyss in data) {
+                 if (data[keyss]['SOURCE_URL'] !== row.source_url) {
+                 } else {
+                     matched = matched + 1;
+                   //  console.log(row.source_url);
+                 }
+             }
+         });
+         res.send("<h1>You have connected " + matched + " times</h1>");
+     });
+
+}
 
 
 
 
-        let matched = 0;
-        let not_matched = 0;
-        const workbook = xlsx.readFile("./uploads/"+filename);
-        const sheet_name_list = workbook.SheetNames;
-        const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);
-        const totalSources = data.length;
 
 
-        let sql = `SELECT name FROM excel`;
-        let query = connection.query(sql, (err, result) => {
+// app.post('/ss',(req, res) => {
+//
+//      if(!req.files){
+//       res.send("<h1>Invalid Input</h1>");
+//      }else {
+            //  const files = req.files.filename;
+              //const filename = files.name;
+              //files.mv("./uploads/"+filename);
+         // }
 
-            if (err) throw err;
-            //retrive every line
-            Object.keys(result).forEach(function (key) {
-                let row = result[key];
-                // console.log(row.name);
 
-                for (let keyss in data) {
-                    if (data[keyss]['NAME'] !== row.name) {
 
-                    } else {
-                        matched = matched + 1;
-                        //console.log("hey ",row.name)
+         // let matched = 0;
+         // let not_matched = 0;
+         // const workbook = xlsx.readFile("./uploads/"+filename);  // workbook holds all the sheets in single excel file
+         // const sheet_name_list = workbook.SheetNames;  // assigning those sheets names to sheet_name_list
+         // //console.log(sheet_name_list[0]);
+         // const data = xlsx.utils.sheet_to_json(workbook.Sheets[sheet_name_list[0]]);  //extracting sheet one data to JSON
+         // //console.log(data);
+         // const totalSources = data.length;  // length of the excel / json sheet
+         // //console.log(totalSources);
 
-                    }
-                }
-            });
 
-            // res.send("<h1>You have connected "+matched+ " times</h1>");
-            res.render('success_page', {
-                title: 'RESULTS',
-                matched: matched,
-                not_matched: totalSources - matched
-            });
+         // let sql = `SELECT source_url FROM excel`;
+         // let query = connection.query(sql, (err, result) => {
 
-        });
+             // if (err) throw err;
+             //
+             // Object.keys(result).forEach(function (key) {
+             //     let row = result[key];
+             //     // console.log(row.source_url);   //data from database and from source url
+             //
+             //
+             //     for (let keyss in data) {
+             //
+             //         //  console.log(data[keyss]['SOURCE_URL']);   //when we extract data to json here keys are index and another[] are column name
+             //
+             //         if (data[keyss]['SOURCE_URL'] !== row.source_url) {
+             //
+             //         } else {
+             //             matched = matched + 1;
+             //             console.log(row.source_url)
+             //             //             //console.log("hey ",row.name)
+             //
+             //         }
+             //     }
+             // });
+
+
+           //  res.send("<h1>You have connected " + matched + " times</h1>");
+             // res.render('success_page', {
+             //     title: 'RESULTS',
+             //     matched: matched,
+             //     not_matched: totalSources - matched
+             // });
+
+       //  });
 
 
 // res.send("<h1>You have connected "+matched+ " times </h1>");
@@ -180,8 +248,9 @@ app.post('/ss',(req, res) => {
 //     // }
 // });
 //     console.log(result);
+   //  }
+//});
 
-});
 
 
 //FOR SHEETS MODIFICATIONS ADD DELETE CALXULATIONS
@@ -201,6 +270,7 @@ app.post('/ss',(req, res) => {
 // xlsx.utils.book_append_sheet(newWs,"NEW_Data_Name");
 
 //xlsx,writwFile(newWB, "New_DATA_FIle.xlsx");
+
 
 
 
